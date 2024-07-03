@@ -1,0 +1,39 @@
+[tool.poetry]
+name = "random-facts-wikipedia"
+version = "0.1.0"
+description = ""
+authors = ["Jonny Uribe <jouribe@starbucks.com>"]
+readme = "README.md"
+license = "MIT"
+homepage = "https://github.com/sirjoy/random-facts-wikipedia"
+repository = "https://github.com/sirjoy/random-facts-wikipedia"
+
+
+[tool.poetry.dependencies]
+python = "^3.8"
+click = "^8.1.7"
+
+
+requests = "^2.32.3"
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.2.2"
+
+pytest-cov = "^5.0.0"
+pytest-mock = "^3.14.0"
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+random-facts-wikipedia = "random_facts_wikipedia.console:main"
+
+[tool.coverage.paths]
+source = ["src", "*/site-packages"]
+
+[tool.coverage.run]
+branch = true
+source = ["random_facts_wikipedia"]
+
+[tool.coverage.report]
+show_missing = true
+fail_under = 100
