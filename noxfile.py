@@ -1,8 +1,10 @@
 import nox
 
-nox.options.sessions = "lint", "safety", "tests"
+nox.options.sessions = "lint", "safety", "tests", "mypy"
 
 locations = "src", "tests", "noxfile.py"
+
+supported_python_versions = ["3.10", "3.9"]
 
 def install_dependencies(session, *args):
     session.install("-e", ".")
@@ -43,3 +45,16 @@ def black(session):
 def safety(session):
     install_dependencies(session, "safety")
     session.run("safety", "check", "--full-report")
+
+@nox.session(python=supported_python_versions)
+def mypy(session):
+    args = session.posargs or locations
+    install_dependencies(session, "mypy")
+    session.run("mypy", *args)
+
+@nox.session(python="3.10")
+def pytype(session):
+    """Run the static type checker."""
+    args = session.posargs or ["--disable=import-error", *locations]
+    install_dependencies(session, "pytype")
+    session.run("pytype", *args)
