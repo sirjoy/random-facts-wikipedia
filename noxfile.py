@@ -95,5 +95,6 @@ def xdoctest(session) -> None:
 @nox.session(python="3.10")
 def docs(session: Session) -> None:
     """Build the documentation."""
-    install_dependencies(session, "sphinx")
+    session.run("poetry", "install", "--no-dev", external=True)
+    install_dependencies(session, "sphinx", "sphinx-autodoc-typehints")
     session.run("sphinx-build", "docs", "docs/_build")
