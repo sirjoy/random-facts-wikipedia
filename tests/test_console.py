@@ -21,6 +21,7 @@ def runner():
 
 
 def test_main_succeeds(runner, mock_requests_get):
+    """It exits with a status code of zero."""
     result = runner.invoke(console.main)
     assert result.exit_code == 0
 

@@ -1,11 +1,14 @@
 """Nox sessions."""
+
 import nox
+from nox.sessions import Session
 
 
+package = 'random_facts_wikipedia'
 nox.options.sessions = "lint", "safety", "tests", "mypy"
 
 
-locations = "src", "tests", "noxfile.py"
+locations = "src", "tests", "noxfile.py", "docs/conf.py"
 
 
 supported_python_versions = ["3.10", "3.9"]
@@ -44,6 +47,7 @@ def lint(session):
         "flake8-bugbear",
         "flake8-docstrings",
         "flake8-import-order",
+        "darglint",
     )
     session.run("flake8", *args)
 
@@ -77,3 +81,19 @@ def pytype(session):
     args = session.posargs or ["--disable=import-error", *locations]
     install_dependencies(session, "pytype")
     session.run("pytype", *args)
+
+
+@nox.session(python=["3.10"])
+def xdoctest(session) -> None:
+    """Run examples with xdoctest."""
+    args = session.posargs or ["all"]
+    session.run("poetry", "install", "--no-dev", external=True)
+    install_dependencies(session, "xdoctest")
+    session.run("python", "-m", "xdoctest", package, *args)
+
+
+@nox.session(python="3.10")
+def docs(session: Session) -> None:
+    """Build the documentation."""
+    install_dependencies(session, "sphinx")
+    session.run("sphinx-build", "docs", "docs/_build")

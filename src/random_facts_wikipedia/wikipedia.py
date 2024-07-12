@@ -1,4 +1,5 @@
 """Client for the Wikipedia REST API, version 1."""
+
 from dataclasses import dataclass
 
 import click
@@ -18,6 +19,7 @@ class Page:
         title: The title of the Wikipedia page.
         extract: A plain text summary.
     """
+
     title: str
     extract: str
 
@@ -40,6 +42,12 @@ def random_page(language: str = "en") -> Page:
     Raises:
         ClickException: The HTTP request failed or the HTTP response
             contained an invalid body.
+
+    Example:
+        >>> from random_facts_wikipedia import wikipedia
+        >>> page = wikipedia.random_page(language="en")
+        >>> bool(page.title)
+        True
     """
     url = API_URL.format(language=language)
 
